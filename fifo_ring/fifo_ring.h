@@ -4,6 +4,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define DEBUG
+
+#ifndef DEBUG
+#include "core_cm4.h" 
+#endif
+
 #define FIFO_RING_SIZE 8
 
 typedef struct {

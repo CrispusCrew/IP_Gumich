@@ -44,16 +44,22 @@ void FIFO_RING_Flush(FIFO_RING_t *FIFO_RING) {
 bool FIFO_RING_Push_rewrite(FIFO_RING_t *FIFO_RING, uint8_t data) {
     uint16_t next_head = (FIFO_RING->head + 1) % FIFO_RING_SIZE;
 
-    __disable_irq();  // Отключение прерываний
+    #ifndef DEBUG
+    __disable_irq();
+    #endif
 
     if (next_head == FIFO_RING->tail) { 
+        #ifndef DEBUG
+        __enable_irq();
+        #endif        
         FIFO_RING->tail = (FIFO_RING->tail + 1) % FIFO_RING_SIZE;  
     }
 
     FIFO_RING->buffer[FIFO_RING->head] = data;
     FIFO_RING->head = next_head;
 
-    __enable_irq();  // Включение прерываний
-
+    #ifndef DEBUG
+    __enable_irq();
+    #endif  
     return true;
 }
